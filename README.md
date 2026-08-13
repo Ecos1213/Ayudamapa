@@ -1,16 +1,47 @@
-# React + Vite
+# Emergencias Colombia — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend MVP para una plataforma de coordinación de emergencias en Colombia.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React + Vite
+- Tailwind CSS
+- React Router
+- Leaflet + OpenStreetMap
+- Lucide React
+- Datos mock en memoria
 
-## React Compiler
+## Ejecutar
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Luego abre la URL que indique Vite.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Incluye
+
+- Dashboard
+- Mapa interactivo
+- Listado de lugares
+- Buscador y filtros
+- Detalle de lugar
+- Crear y editar lugares
+- Reporte ciudadano
+- Roles/admin como UI inicial
+- Exportación CSV
+- Estados y niveles de urgencia
+- Indicadores de verificación
+- Diseño responsive
+
+## Siguiente etapa
+
+El proyecto está preparado para sustituir `src/data/mockPlaces.js` y el `AppContext` por Supabase:
+
+1. Crear tablas.
+2. Conectar autenticación.
+3. Implementar roles.
+4. Sustituir CRUD local por servicios Supabase.
+5. Añadir auditoría e historial.
+6. Añadir IndexedDB + Service Worker para offline.
