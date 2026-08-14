@@ -1,15 +1,15 @@
 {
-  "name": "ayudamapa",
+  "name": "emergencias-colombia-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.28.0",
     "axios": "^1.6.2",
@@ -39,5 +39,19 @@
     "tailwindcss": "^4.3.3",
     "vite": "^8.2.0",
     "vite-plugin-pwa": "^1.3.0"
+=======
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^7.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.1.12",
+    "vite": "^6.0.7"
+>>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4
   }
 }

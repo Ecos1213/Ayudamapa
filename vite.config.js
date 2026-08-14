@@ -1,10 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+<<<<<<< HEAD
 import { VitePWA } from 'vite-plugin-pwa'
+=======
+>>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4
 
-// https://vite.dev/config/
 export default defineConfig({
+<<<<<<< HEAD
   plugins: [
     react(),
     tailwindcss(),
@@ -64,3 +67,7 @@ export default defineConfig({
     minify: 'terser',
   },
 })
+=======
+  plugins: [react(), tailwindcss()],
+})
+>>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4
