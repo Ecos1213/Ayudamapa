@@ -1,0 +1,83 @@
+{
+  "name": "Ayuda Mapa - Plataforma de Ayuda Comunitaria",
+  "short_name": "Ayudamapa",
+  "description": "Una plataforma comunitaria para coordinar ayuda, reportar daños y organizar voluntarios",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "categories": ["productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/screenshot-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Mapa",
+      "short_name": "Mapa",
+      "description": "Abrir el mapa de ayuda",
+      "url": "/map",
+      "icons": [
+        {
+          "src": "/icons/shortcut-map.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Crear Punto",
+      "short_name": "Nuevo",
+      "description": "Crear un nuevo punto de ayuda",
+      "url": "/map?action=create",
+      "icons": [
+        {
+          "src": "/icons/shortcut-create.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "lang": "es-ES",
+  "dir": "ltr"
+}
