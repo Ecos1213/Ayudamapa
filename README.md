@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Ayudamapa - Frontend
 
 A React + Vite web application for disaster response coordination. Enables citizens, volunteers, and coordinators to share real-time information about damage, supply needs, and volunteer assistance during emergencies.
@@ -197,4 +196,4 @@ El proyecto está preparado para sustituir `src/data/mockPlaces.js` y el `AppCon
 4. Sustituir CRUD local por servicios Supabase.
 5. Añadir auditoría e historial.
 6. Añadir IndexedDB + Service Worker para offline.
->>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4
+

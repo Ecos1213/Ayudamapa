@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './app/components/ProtectedRoute';
 import LoginPage from './app/pages/LoginPage';
@@ -46,34 +45,3 @@ function App() {
 }
 
 export default App;
-=======
-import { Routes, Route } from 'react-router-dom'
-import AppLayout from './components/layout/AppLayout'
-import DashboardPage from './pages/DashboardPage'
-import PlacesPage from './pages/PlacesPage'
-import PlaceDetailPage from './pages/PlaceDetailPage'
-import CreatePlacePage from './pages/CreatePlacePage'
-import EditPlacePage from './pages/EditPlacePage'
-import ReportPage from './pages/ReportPage'
-import ReportsPage from './pages/ReportsPage'
-import AdminPage from './pages/AdminPage'
-import NotFoundPage from './pages/NotFoundPage'
-
-export default function App() {
-  return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/lugares" element={<PlacesPage />} />
-        <Route path="/lugares/nuevo" element={<CreatePlacePage />} />
-        <Route path="/lugares/:id" element={<PlaceDetailPage />} />
-        <Route path="/lugares/:id/editar" element={<EditPlacePage />} />
-        <Route path="/reportar" element={<ReportPage />} />
-        <Route path="/reportes" element={<ReportsPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
-  )
-}
->>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4

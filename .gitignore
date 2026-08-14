@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -36,9 +35,3 @@ dist-ssr
 # OS files
 Thumbs.db
 
-=======
-node_modules/
-dist/
-.env
-.env.local
->>>>>>> 94fa38c0bd2bbb26c945be08427660a5739d64c4
