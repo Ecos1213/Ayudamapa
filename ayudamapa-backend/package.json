@@ -1,0 +1,39 @@
+{
+  "name": "ayudamapa-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Ayudamapa disaster response coordination platform",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "migrate": "node-pg-migrate up --verbose --migrations-dir db/migrations",
+    "start": "node src/index.js",
+    "build": "echo 'Backend does not require build step'",
+    "lint": "eslint .",
+    "test": "echo 'Tests not yet configured'"
+  },
+  "keywords": [
+    "disaster-response",
+    "coordination",
+    "api"
+  ],
+  "author": "Ayudamapa Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.0",
+    "node-pg-migrate": "^7.0.0",
+    "pg": "^8.11.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0",
+    "nodemon": "^3.0.2"
+  }
+}

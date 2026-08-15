@@ -1,0 +1,6 @@
+{
+  "migrationsTable": "pgmigrations",
+  "migrationsSchema": "resilio_schema",
+  "dir": "db/migrations",
+  "auto": true
+}
