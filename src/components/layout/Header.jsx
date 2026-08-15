@@ -1,10 +1,11 @@
 import { Bell, Menu, UserCircle, X, LayoutDashboard, Map, PlusCircle, FileBarChart, ShieldCheck } from 'lucide-react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
 
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/lugares', label: 'Lugares', icon: Map },
+  { to: '/lugares', label: 'Situación', icon: Map },
   { to: '/reportar', label: 'Reportar', icon: PlusCircle },
   { to: '/reportes', label: 'Reportes', icon: FileBarChart },
   { to: '/admin', label: 'Administración', icon: ShieldCheck }
@@ -12,7 +13,7 @@ const links = [
 
 const titles = {
   '/': 'Dashboard',
-  '/lugares': 'Lugares',
+  '/lugares': 'Situación',
   '/reportar': 'Reportar situación',
   '/reportes': 'Reportes',
   '/admin': 'Administración'
@@ -20,6 +21,7 @@ const titles = {
 
 export default function Header() {
   const location = useLocation()
+  const { user, isAuthenticated, logout } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const title = titles[location.pathname] || 'Detalle del lugar'
 
@@ -65,13 +67,18 @@ export default function Header() {
             <Bell size={19} />
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
           </button>
-          <div className="hidden items-center gap-2 sm:flex">
-            <UserCircle size={32} className="text-slate-400" />
-            <div className="text-sm">
-              <p className="font-semibold">Coordinador</p>
-              <p className="text-xs text-slate-400">Administrador</p>
+          {isAuthenticated ? (
+            <div className="hidden items-center gap-2 sm:flex">
+              <UserCircle size={32} className="text-slate-400" />
+              <div className="text-sm">
+                <p className="font-semibold">{user?.display_name || user?.email}</p>
+                <p className="text-xs text-slate-400">Usuario registrado</p>
+              </div>
+              <button type="button" onClick={logout} className="ml-2 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-600">Salir</button>
             </div>
-          </div>
+          ) : (
+            <Link to="/login" className="rounded-xl bg-[#0f3d5e] px-3 py-2 text-xs font-semibold text-white sm:px-4 sm:text-sm">Iniciar sesión</Link>
+          )}
         </div>
       </header>
 
@@ -123,7 +130,7 @@ export default function Header() {
 
             <div className="m-4 rounded-2xl bg-white/10 p-4 text-xs text-slate-200">
               <p className="font-semibold text-white">Sistema de coordinación</p>
-              <p className="mt-1">Prototipo frontend · datos locales</p>
+              <p className="mt-1">Información pública y reportes de emergencia</p>
             </div>
           </aside>
         </>

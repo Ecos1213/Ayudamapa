@@ -1,37 +1,7 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet'
 import { Link } from 'react-router-dom'
-import { typeLabels, urgencyLabels } from '../../data/mockPlaces'
+import { typeLabels, urgencyLabels, reportTypeLabels } from '../../data/mockPlaces'
 
-export default function EmergencyMap({ places }) {
-  return (
-    <div className="h-[430px] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <MapContainer center={[3.45, -76.50]} zoom={10} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; OpenStreetMap contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {places.map(place => (
-          <CircleMarker
-            key={place.id}
-            center={[place.lat, place.lng]}
-            radius={9}
-            pathOptions={{
-              color: place.nivelUrgencia === 'alta' ? '#dc2626' : place.nivelUrgencia === 'media' ? '#d97706' : '#16a34a',
-              fillOpacity: 0.8
-            }}
-          >
-            <Popup>
-              <div className="min-w-[180px]">
-                <strong>{place.nombre}</strong>
-                <p className="mt-1 text-sm">{typeLabels[place.tipo]} · {urgencyLabels[place.nivelUrgencia]}</p>
-                <Link className="mt-2 inline-block text-sm font-semibold text-blue-700" to={`/lugares/${place.id}`}>
-                  Ver detalle →
-                </Link>
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
-      </MapContainer>
-    </div>
-  )
-}
+function hasValidCoordinates(place) { const lat = place?.lat; const lng = place?.lng; return lat !== null && lat !== undefined && lat !== '' && lng !== null && lng !== undefined && lng !== '' && Number.isFinite(Number(lat)) && Number.isFinite(Number(lng)) && Number(lat) >= -90 && Number(lat) <= 90 && Number(lng) >= -180 && Number(lng) <= 180 }
+function markerColor(place) { if (place.recordKind === 'report') { const colors = { persona_atrapada: '#dc2626', persona_desaparecida: '#7c3aed', persona_herida: '#e11d48', dano_estructural: '#ea580c', via_bloqueada: '#d97706', incendio: '#dc2626', inundacion: '#0891b2', emergencia_medica: '#db2777', necesidad: '#2563eb', otra: '#64748b' }; return colors[place.reportType] || '#64748b' } return place.nivelUrgencia === 'alta' ? '#dc2626' : place.nivelUrgencia === 'media' ? '#d97706' : '#16a34a' }
+export default function EmergencyMap({ places = [] }) { const records = places.filter(hasValidCoordinates); return <div className="h-[430px] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"><MapContainer center={[3.45, -76.50]} zoom={10} scrollWheelZoom={false}><TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />{records.map(record => <CircleMarker key={record.id} center={[Number(record.lat), Number(record.lng)]} radius={9} pathOptions={{ color: markerColor(record), fillColor: markerColor(record), fillOpacity: 0.8 }}><Popup><div className="min-w-[180px]"><strong>{record.nombre}</strong><p className="mt-1 text-sm">{record.recordKind === 'report' ? (reportTypeLabels[record.reportType] || record.reportType) : (typeLabels[record.placeType || record.tipo] || record.tipo)} · {urgencyLabels[record.nivelUrgencia] || record.nivelUrgencia}</p><Link className="mt-2 inline-block text-sm font-semibold text-blue-700" to={`/lugares/${record.id}`}>Ver detalle →</Link></div></Popup></CircleMarker>)}</MapContainer></div> }

@@ -7,7 +7,7 @@ import PlaceCard from '../components/places/PlaceCard'
 import { useApp } from '../context/AppContext'
 
 export default function DashboardPage() {
-  const { places } = useApp()
+  const { places, loading, error } = useApp()
   const active = places.filter(p => p.estado === 'activo')
   const urgent = places.filter(p => p.nivelUrgencia === 'alta')
   const people = places.reduce((sum, p) => sum + p.personasAtendidas, 0)
@@ -15,6 +15,9 @@ export default function DashboardPage() {
   const needs = places.flatMap(place =>
     place.necesidades.filter(n => n.estado !== 'cubierta').map(n => ({ ...n, place }))
   ).slice(0, 5)
+
+  if (loading) return <div className="mx-auto max-w-7xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">Cargando información desde el servidor...</div>
+  if (error && !places.length) return <div className="mx-auto max-w-7xl rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700">{error}</div>
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -66,7 +69,7 @@ export default function DashboardPage() {
 
       <section className="mt-7">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold text-slate-900">Lugares recientes</h3>
+          <h3 className="font-bold text-slate-900">Registros recientes</h3>
           <Link to="/lugares" className="text-sm font-semibold text-blue-700">Ver todos</Link>
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

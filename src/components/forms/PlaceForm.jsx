@@ -1,32 +1,35 @@
 import { useState } from 'react'
-import { Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2, LocateFixed, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-const initial = { nombre:'', tipo:'albergue', ciudad:'', departamento:'', direccion:'', lat:'', lng:'', capacidad:'', personasAtendidas:'', contacto:'', estadoAcceso:'Accesible', nivelUrgencia:'media', estado:'activo' }
+const initial = { nombre:'', tipo:'albergue', descripcion:'', ciudad:'', departamento:'', direccion:'', lat:'', lng:'', capacidad:'', personasAtendidas:'', contacto:'', estadoAcceso:'Accesible', nivelUrgencia:'media', estado:'activo' }
 const emptyNeed = () => ({ id:`need-${Date.now()}-${Math.random().toString(36).slice(2)}`, item:'', cantidadRequerida:'', cantidadCubierta:'', unidad:'unidades', estado:'pendiente' })
 const normalizeNeeds = (needs=[]) => needs.map(n => ({...n, cantidadRequerida:n.cantidadRequerida ?? '', cantidadCubierta:n.cantidadCubierta ?? '', unidad:n.unidad || 'unidades', estado:n.estado || 'pendiente'}))
 
 export default function PlaceForm({ initialValues, onSubmit, submitLabel='Guardar lugar' }) {
   const navigate=useNavigate()
-  const [form,setForm]=useState(initialValues ? {...initial,...initialValues} : initial)
+  const [form,setForm]=useState(() => initialValues ? {...initial,...initialValues, lat: initialValues.lat ?? '', lng: initialValues.lng ?? ''} : initial)
   const [needs,setNeeds]=useState(()=>normalizeNeeds(initialValues?.necesidades))
   const [error,setError]=useState('')
+  const [locating,setLocating]=useState(false)
   const update=(key,value)=>setForm(c=>({...c,[key]:value}))
   const updateNeed=(id,key,value)=>setNeeds(c=>c.map(n=>n.id===id?{...n,[key]:value}:n))
   const addNeed=()=>setNeeds(c=>[...c,emptyNeed()])
   const removeNeed=id=>setNeeds(c=>c.filter(n=>n.id!==id))
   const status=n=>{const r=Number(n.cantidadRequerida)||0,c=Number(n.cantidadCubierta)||0;return r>0&&c>=r?'cubierta':c>0?'parcial':'pendiente'}
-  const submit=e=>{e.preventDefault();setError('');if(!form.nombre||!form.ciudad||!form.departamento){setError('Completa nombre, ciudad y departamento.');return}if(needs.some(n=>!n.item.trim())){setError('Todas las necesidades deben tener un nombre.');return}onSubmit({...form,lat:Number(form.lat)||3.4516,lng:Number(form.lng)||-76.532,capacidad:Number(form.capacidad)||0,personasAtendidas:Number(form.personasAtendidas)||0,necesidades:needs.map(n=>({...n,item:n.item.trim(),cantidadRequerida:Number(n.cantidadRequerida)||0,cantidadCubierta:Math.min(Number(n.cantidadCubierta)||0,Number(n.cantidadRequerida)||0),estado:status(n)}))})}
+  const useMyLocation=()=>{if(!navigator.geolocation){setError('Tu navegador no permite obtener la ubicación. Usa la dirección.');return}setLocating(true);setError('');navigator.geolocation.getCurrentPosition(({coords})=>{update('lat',coords.latitude.toFixed(6));update('lng',coords.longitude.toFixed(6));setLocating(false)},()=>{setLocating(false);setError('No fue posible obtener tu ubicación. Revisa los permisos del navegador o usa la dirección.')},{enableHighAccuracy:true,timeout:10000,maximumAge:60000})}
+  const submit=e=>{e.preventDefault();setError('');if(!form.nombre||!form.ciudad||!form.departamento){setError('Completa nombre, ciudad y departamento.');return}if(!form.direccion && (form.lat==='' || form.lng==='')){setError('Indica una dirección o usa tu ubicación actual.');return}if(needs.some(n=>!n.item.trim())){setError('Todas las necesidades deben tener un nombre.');return}onSubmit({...form,lat:form.lat===''?'':Number(form.lat),lng:form.lng===''?'':Number(form.lng),capacidad:Number(form.capacidad)||0,personasAtendidas:Number(form.personasAtendidas)||0,necesidades:needs.map(n=>({...n,item:n.item.trim(),cantidadRequerida:Number(n.cantidadRequerida)||0,cantidadCubierta:Math.min(Number(n.cantidadCubierta)||0,Number(n.cantidadRequerida)||0),estado:status(n)}))})}
   const input=(key,label,type='text',placeholder='')=><label><span className="mb-1.5 block text-sm font-semibold text-slate-700">{label}</span><input type={type} value={form[key]} onChange={e=>update(key,e.target.value)} placeholder={placeholder} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500"/></label>
   return <form onSubmit={submit} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
     {error&&<div className="mb-5 rounded-xl bg-red-50 p-3 text-sm font-medium text-red-700">{error}</div>}
     <div className="grid gap-5 md:grid-cols-2">
       {input('nombre','Nombre del lugar','text','Ej. Albergue San José')}
-      <Select label="Tipo" value={form.tipo} onChange={v=>update('tipo',v)} options={[['albergue','Albergue'],['rescate','Zona de rescate'],['acopio','Punto de acopio'],['salud','Centro de salud']]}/>
-      {input('ciudad','Ciudad','text','Cali')}{input('departamento','Departamento','text','Valle del Cauca')}{input('direccion','Dirección','text','Calle / Carrera')}{input('contacto','Contacto','text','Teléfono')}{input('lat','Latitud','number','3.4516')}{input('lng','Longitud','number','-76.5320')}{input('capacidad','Capacidad','number','200')}{input('personasAtendidas','Personas atendidas','number','0')}
+      <Select label="Tipo" value={form.tipo} onChange={v=>update('tipo',v)} options={[['albergue','Albergue / centro de acogida'],['rescate','Zona de rescate'],['acopio','Punto de acopio'],['salud','Centro de salud'],['incidencia','Otra incidencia']]}/>
+      {input('ciudad','Ciudad','text','Cali')}{input('departamento','Departamento','text','Valle del Cauca')}<div className="md:col-span-2">{input('direccion','Dirección','text','Ej. Calle 5 #10-20')}<div className="mt-2 flex flex-wrap items-center gap-2"><button type="button" onClick={useMyLocation} disabled={locating} className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700 disabled:opacity-60"><LocateFixed size={15}/>{locating?'Obteniendo ubicación...':'Usar mi ubicación actual'}</button>{form.lat&&form.lng?<span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700"><MapPin size={14}/> Ubicación obtenida</span>:<span className="text-xs text-slate-500">La dirección es suficiente si no puedes obtener coordenadas.</span>}</div></div>{input('contacto','Contacto','text','Teléfono')}<div className="grid gap-5 sm:grid-cols-2 md:contents">{input('lat','Latitud','number','Opcional: 3.4516')}{input('lng','Longitud','number','Opcional: -76.5320')}</div>{input('capacidad','Capacidad','number','200')}{input('personasAtendidas','Personas atendidas','number','0')}
       <Select label="Estado de acceso" value={form.estadoAcceso} onChange={v=>update('estadoAcceso',v)} options={[['Accesible','Accesible'],['Vía parcialmente bloqueada','Vía parcialmente bloqueada'],['Vía bloqueada','Vía bloqueada']]}/>
       <Select label="Nivel de urgencia" value={form.nivelUrgencia} onChange={v=>update('nivelUrgencia',v)} options={[['alta','Alta'],['media','Media'],['baja','Baja']]}/>
       <Select label="Estado" value={form.estado} onChange={v=>update('estado',v)} options={[['activo','Activo'],['cerrado','Cerrado'],['en_riesgo','En riesgo']]}/>
+      <label className="md:col-span-2"><span className="mb-1.5 block text-sm font-semibold text-slate-700">Descripción</span><textarea rows="4" value={form.descripcion || ''} onChange={e=>update('descripcion',e.target.value)} placeholder="Describe la situación, daños o contexto del lugar..." className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500" /></label>
     </div>
     <section className="mt-8 border-t border-slate-100 pt-7">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><h3 className="text-lg font-bold text-slate-900">Necesidades actuales</h3><p className="mt-1 text-sm text-slate-500">Agrega cualquier recurso que haga falta; no hay una lista fija.</p></div><button type="button" onClick={addNeed} className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700"><Plus size={17}/>Agregar necesidad</button></div>

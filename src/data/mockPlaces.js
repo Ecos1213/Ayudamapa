@@ -116,10 +116,37 @@ export const mockPlaces = [
 ]
 
 export const typeLabels = {
-  albergue: 'Albergue',
-  rescate: 'Rescate',
+  albergue: 'Albergue / centro de acogida',
+  rescate: 'Zona de rescate',
   acopio: 'Punto de acopio',
-  salud: 'Centro de salud'
+  salud: 'Centro de salud',
+  incidencia: 'Incidencia'
+}
+
+export const reportTypeLabels = {
+  persona_atrapada: 'Persona atrapada',
+  persona_desaparecida: 'Persona desaparecida',
+  persona_herida: 'Persona herida',
+  dano_estructural: 'Daño estructural',
+  via_bloqueada: 'Vía o acceso bloqueado',
+  incendio: 'Incendio',
+  inundacion: 'Inundación',
+  emergencia_medica: 'Emergencia médica',
+  necesidad: 'Necesidad urgente de recursos',
+  otra: 'Otra situación'
+}
+
+export const reportTypeColors = {
+  persona_atrapada: 'red',
+  persona_desaparecida: 'violet',
+  persona_herida: 'rose',
+  dano_estructural: 'orange',
+  via_bloqueada: 'amber',
+  incendio: 'red',
+  inundacion: 'cyan',
+  emergencia_medica: 'pink',
+  necesidad: 'blue',
+  otra: 'slate'
 }
 
 export const urgencyLabels = {

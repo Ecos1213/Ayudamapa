@@ -3,7 +3,7 @@ import { LayoutDashboard, Map, PlusCircle, FileBarChart, ShieldCheck, Siren } fr
 
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/lugares', label: 'Lugares', icon: Map },
+  { to: '/lugares', label: 'Situación', icon: Map },
   { to: '/reportar', label: 'Reportar', icon: PlusCircle },
   { to: '/reportes', label: 'Reportes', icon: FileBarChart },
   { to: '/admin', label: 'Administración', icon: ShieldCheck }
@@ -42,7 +42,7 @@ export default function Sidebar() {
 
       <div className="m-4 rounded-2xl bg-white/10 p-4 text-xs text-slate-200">
         <p className="font-semibold text-white">Sistema de coordinación</p>
-        <p className="mt-1">Prototipo frontend · datos locales</p>
+        <p className="mt-1">Coordinación de emergencias</p>
       </div>
     </aside>
   )

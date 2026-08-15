@@ -1,34 +1,47 @@
-import { createContext, useContext, useMemo, useState } from 'react'
-import { mockPlaces } from '../data/mockPlaces'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createPlace, listPlaces, reviewPlace as reviewPlaceRequest, updatePlace as updatePlaceRequest } from '../services/placesService'
 
 const AppContext = createContext(null)
 
 export function AppProvider({ children }) {
-  const [places, setPlaces] = useState(mockPlaces)
+  const [places, setPlaces] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  const addPlace = (place) => {
-    const newPlace = {
-      ...place,
-      id: `place-${Date.now()}`,
-      ultimaActualizacion: new Date().toISOString(),
-      verificado: false
+  const refreshPlaces = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await listPlaces()
+      setPlaces(data)
+      setError('')
+    } catch (err) {
+      setError(err.message || 'No se pudieron cargar los lugares.')
+    } finally {
+      setLoading(false)
     }
-    setPlaces(current => [newPlace, ...current])
-    return newPlace
-  }
+  }, [])
 
-  const updatePlace = (id, changes) => {
-    setPlaces(current =>
-      current.map(place =>
-        place.id === id
-          ? { ...place, ...changes, ultimaActualizacion: new Date().toISOString() }
-          : place
-      )
-    )
-  }
+  useEffect(() => { refreshPlaces() }, [refreshPlaces])
 
-  const value = useMemo(() => ({ places, addPlace, updatePlace }), [places])
+  const addPlace = useCallback(async (place) => {
+    const created = await createPlace(place)
+    setPlaces(current => [created, ...current])
+    return created
+  }, [])
 
+  const updatePlace = useCallback(async (id, changes) => {
+    const updated = await updatePlaceRequest(id, changes)
+    setPlaces(current => current.map(place => place.id === id ? updated : place))
+    return updated
+  }, [])
+
+  const reviewPlace = useCallback(async (id, approved) => {
+    const updated = await reviewPlaceRequest(id, approved)
+    setPlaces(current => current.map(place => place.id === id ? updated : place))
+    return updated
+  }, [])
+
+  const value = useMemo(() => ({ places, loading, error, refreshPlaces, addPlace, updatePlace, reviewPlace }), [places, loading, error, refreshPlaces, addPlace, updatePlace, reviewPlace])
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
 
